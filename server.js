@@ -23,16 +23,19 @@ app.use('/api/orders', orderRoutes);
 
 // MongoDB Connection
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     logger.info('MongoDB Connected'); // Use logger
   })
   .catch((err) => {
     logger.error('MongoDB Connection Error: ', err); // Use logger
   });
+
+  // Add this to your server.js file, after your MongoDB connection code:
+process.on('unhandledRejection', (reason, promise) => {
+  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // Application specific logging, throwing an error, or other logic here
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

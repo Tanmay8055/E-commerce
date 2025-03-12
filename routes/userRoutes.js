@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
 const userController = require('../controllers/userController');
+const { authMiddleware } = require('../middleware/authMiddleware');
 
 // User Registration
 router.post(
@@ -18,6 +19,6 @@ router.post(
 router.post('/login', userController.loginUser);
 
 // Get User by ID (Example: Requires Authentication)
-router.get('/:id', userController.getUserById);
+router.get('/:id', authMiddleware, userController.getUserById);
 
 module.exports = router;
